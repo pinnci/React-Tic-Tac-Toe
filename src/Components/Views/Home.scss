@@ -1,0 +1,46 @@
+.homeScreen{
+    h1{
+        color:white;
+        font-weight: 300;
+        font-size: 5em;
+        margin-top: -1em;
+        margin-bottom: 0;
+    }
+
+    p{
+        color:white;
+        font-weight: 300;
+        font-size: 1.5em;
+        margin-bottom: .5em;
+    }
+
+    span{
+        color:#ccc;
+        opacity: 0.7;
+        font-weight: 300;
+    }
+
+    input{
+        margin-top: 1em;
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 1.2em;
+        line-height: 1.2em;
+        padding: .3em;
+        outline: none;
+        border:none;
+        border-radius: .5em;
+        padding-left: .6em;
+        background: url('../Icons/next-icon.svg') white no-repeat;
+        background-position-x: 99%;
+        background-position-y: center;
+        background-size: 5%;
+    }
+}
+
+.error{
+    &::placeholder{
+        color:red;
+    }
+}
+
