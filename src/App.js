@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
+//React-router
 import {
   BrowserRouter as Router,
   Switch,
   Route
 } from 'react-router-dom';
 
-//React-spring
-import {useSpring, animated} from 'react-spring';
+//Debounce - Lodash
+import {debounce} from 'lodash';
 
 //Styles
 import './App.scss';
@@ -23,6 +24,17 @@ function App() {
   //Create state for matrix
   const [values,setValues] = useState([]);
 
+  //Single player or player vs. player
+  const [playerVsPlayer,setPlayerVsPlayer] = useState({
+    AI:false,
+    AImove:false  
+  });
+
+  //Debounce computer move
+  const debounceComputerMove = debounce(()=>{
+    computerMove(values);
+  },500);
+
   //Create state for rows and columns
   const [dimensions,setDimensions] = useState({
     rows:null,
@@ -31,18 +43,6 @@ function App() {
 
   //Is there a winner?
   const [winner,setWinner] = useState(false);
-
-  //Start animation - fade in input field
-  const [moveHome,setMoveHome] = useState(false);
-
-  const props = useSpring({
-    opacity: moveHome ? 1 : 0,
-    config:{duration:1000}
-  });
-
-  useEffect(()=>{
-    setMoveHome(true)
-  },[moveHome]);
 
   //Generate matrix and set to state
   function generateMatrix(rows,columns){
@@ -61,31 +61,140 @@ function App() {
     });
   }
 
+  //Pick random empty column
+  function getRandomCol(rows) {
+    return Math.floor(Math.random() * Math.floor(rows.length));
+  }
+
   //Update matrix
   function updateValues(row,column){
     //Make a copy of matrix
     let newValue = [...values];
 
-    //If clicked field has value then return / Prevent overwriting signs
-    //If clicked field has not value then insert X or O component
-    if(values[row][column] === " "){
-      if(sign === true){
-        newValue[row][column] = <p className="xSign">x</p>
+    if(playerVsPlayer.AI === false){
+      //If clicked field has value then return / Prevent overwriting signs
+      //If clicked field has not value then insert X or O component
+      if(values[row][column] === " "){
+        if(sign === true){
+          newValue[row][column] = <p className="xSign">x</p>
+        }else{
+          newValue[row][column] = <p className="oSign">o</p>
+        }
       }else{
-        newValue[row][column] = <p className="oSign">o</p>
+        return;
       }
-    }else{
-      return;
+
+      //Switch sign
+      setSign(!sign);
+
+      //Update matrix with new value
+      setValues(newValue);
+
+      //Check if there is a winner
+      checkWinner();
+
+    }else{    
+      //If playervsplayer.AI === true, i.e player vs computer
+      if(playerVsPlayer.AImove === false){
+        if(values[row][column] === " "){
+            newValue[row][column] = <p className="xSign">x</p>
+  
+            //Switch sign
+            setSign(!sign);
+  
+            //Update matrix with new value
+            setValues(newValue);
+  
+            //Switch state to computer move
+            setPlayerVsPlayer(prevState => ({
+              ...prevState,
+              AImove:true
+            }));
+            
+            //Check if there is a winner
+            checkWinner();
+            
+            //Computer makes a move
+            debounceComputerMove(values);
+        }else{
+          return;
+        }
+      }
+    }
+  }
+
+  //Computer moves
+  function computerMove(values){
+    let newValue = [...values];
+
+    let emptyCols = [];
+    let randomCol;
+
+    //Loop thru matrix and find all empty cols
+    for(var i=0;i<values.length;i++){
+      for(var j=0;j<values[i].length;j++){
+        if(values[i][j] === " "){
+          emptyCols.push([[i][j] = i,j]);
+        }
+      }
     }
 
-    //Switch sign
-    setSign(!sign);
+    //If there are no empty cells then return
+    if(emptyCols.length > 0){
+      //Get random from emptyCols
+      randomCol = getRandomCol(emptyCols);
 
-    //Update matrix with new value
-    setValues(newValue);
+      let row = emptyCols[randomCol][0];
+      let col = emptyCols[randomCol][1];
 
-    //Check if there is a winner
-    checkWinner();
+      newValue[row][col] = <p className="oSign">o</p>
+
+      //Switch sign
+      setSign(true);
+
+      //Switch state player move
+      setPlayerVsPlayer(prevState => ({
+        ...prevState,
+        AImove:false
+      }));
+
+      //Update matrix with new value;
+      setValues(newValue);
+
+      checkWinner();
+    }else{
+      return;
+    } 
+  }
+
+  //Play player vs. computer
+  function playPlayerVsComputer(){
+    setPlayerVsPlayer({
+      AI:true,
+      AImove:false
+    });
+
+    setDimensions({
+      rows:"3",
+      columns:"3"
+    })
+
+    generateMatrix(3,3);
+  }
+
+  //Play player vs. player
+  function playPlayerVsPlayer(){
+    setPlayerVsPlayer({
+      AI:false,
+      AImove:false
+    });
+
+    setDimensions({
+      rows:"3",
+      columns:"3"
+    })
+
+    generateMatrix(3,3);
   }
 
   //Display who wins
@@ -233,6 +342,10 @@ function App() {
     setValues(newArr);
     setSign(true);
     setWinner(false);
+    setPlayerVsPlayer({
+      AI:true,
+      AImove:false
+    });
   }
 
   //Reset whole game
@@ -244,7 +357,10 @@ function App() {
     setSign(true);
     setValues([]);
     setWinner(false);
-    setMoveHome(false);
+    setPlayerVsPlayer({
+      AI:false,
+      AImove:false
+    });
   }
 
   return (
@@ -253,11 +369,13 @@ function App() {
         <Router>
           <Switch>
             <Route exact path="/">
-
-              <animated.div style={props}>
-                <Home getSize={getSize}/>
-              </animated.div>
-              
+ 
+            <Home 
+              getSize={getSize}
+              playPlayerVsComputer={playPlayerVsComputer}
+              playPlayerVsPlayer={playPlayerVsPlayer}
+            />
+               
             </Route>
 
             <Route path="/play">

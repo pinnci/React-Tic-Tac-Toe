@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 //Styles
 import './Home.scss';
@@ -71,8 +71,15 @@ function Home(props){
     return(
         <div className="homeScreen">
             <h1>Tic Tac Toe</h1>
-            <p>Please insert size of game board</p>
-            <span>Please use following format : 4x4</span>
+            <p>Select game mode</p>
+
+            <Link to="/play">
+                <button className="playerVsComputer-btn" onClick={props.playPlayerVsComputer}>Player vs. Computer</button>
+            </Link>
+                
+            <Link to="/play">
+                <button className="playerVsComputer-btn" onClick={props.playPlayerVsPlayer}>Player vs. Player</button>
+            </Link>
 
             <form onSubmit={handleSubmit}>
                 <input type="text" ref={sizeOfBoard} onChange={removeHighlightInput} autoFocus />

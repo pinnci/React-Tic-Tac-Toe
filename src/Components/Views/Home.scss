@@ -36,6 +36,17 @@
         background-position-y: center;
         background-size: 5%;
     }
+
+    .playerVsComputer-btn{
+        display:block;
+        width: 100%;
+        margin-top: 1em;
+        padding: 0.5em;
+        box-sizing: border-box;
+        border-radius: .5em;
+        outline: none;
+        border:none;
+    }
 }
 
 .error{
