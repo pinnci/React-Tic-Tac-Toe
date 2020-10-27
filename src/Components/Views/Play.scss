@@ -8,8 +8,8 @@ table{
     tbody{
 
         td{
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             text-align: -webkit-center;
             color: white;
             border: 1px solid white;
@@ -42,12 +42,17 @@ table{
 
 .iconContainer{
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    width: 100%;
+
+    .icon{
+        display: contents;
+    }
 
     .reloadButton{
         fill:#555555;
-        width: 15%;
+        width: 60px;
         transition: .3s ease-in-out;
     
     
@@ -59,13 +64,24 @@ table{
     
     .goHomeButton{
         fill:#555555;
-        width: 20%;
+        width: 80px;
         transition: .3s ease-in-out;
     
     
         &:hover{
             fill:#898989;
             cursor: pointer;
+        }
+    }
+
+    .results{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+
+        .column{
+            color:white;
         }
     }
 }

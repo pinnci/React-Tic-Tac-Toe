@@ -67,11 +67,28 @@ function Play(props){
             </table>
             
             <div className="iconContainer">
-                <Link to="/">
+                <Link to="/" className="icon">
                     <GoHome resetGame={props.resetGame} />
                 </Link>
 
-                <ReloadGame restartGame={props.restartGame} />
+                <div className="results">
+                    <div className="column">
+                        <p>Player 1</p>
+                        <p>{props.player1}</p>
+                    </div>
+
+                    <div className="column">
+                        <p>Ties</p>
+                        <p>{props.ties}</p>
+                    </div>
+
+                    <div className="column">
+                        <p>Player 2</p>
+                        <p>{props.player2}</p>
+                    </div>
+                </div>
+
+                <ReloadGame restartGame={props.restartGame} className="icon" />
             </div>
 
         </div>

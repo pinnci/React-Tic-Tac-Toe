@@ -4,6 +4,9 @@ import { Redirect, Link } from 'react-router-dom';
 //Styles
 import './Home.scss';
 
+//react spring
+import {useTransition, animated} from 'react-spring';
+
 function Home(props){
     //Create state for redirecting
     const [redirect,setRedirect] = useState(false);
@@ -13,6 +16,25 @@ function Home(props){
 
     //State for an error checking
     const [isError,setIsError] = useState(false);
+
+    //State for animation
+    const [showGameOptions, setShowGameOptions] = useState(true);
+
+    //Starting animation
+    const gameOptionsTransitions = useTransition(showGameOptions, null, {
+        from: { opacity: 0, transform:'translateY(200px)' },
+        enter: { opacity: 1, transform:'translateY(0)' },
+        leave: { opacity: 0, transform:'translateY(200px)'}
+    });
+
+    //Fire animations sent as a props
+    function playPlayerVsComputer(){
+        props.playPlayerVsComputer();
+    }
+
+    function playPlayerVsPlayer(){
+        props.playPlayerVsPlayer();
+    }
 
     //Handle form submit
     function handleSubmit(e){
@@ -73,17 +95,22 @@ function Home(props){
             <h1>Tic Tac Toe</h1>
             <p>Select game mode</p>
 
-            <Link to="/play">
-                <button className="playerVsComputer-btn" onClick={props.playPlayerVsComputer}>Player vs. Computer</button>
-            </Link>
+            {gameOptionsTransitions.map(({ item, key, props }) =>
+                item && 
+                    <animated.div key={key} style={props}>
+                        <Link to="/play" className="setGameMode-btn" onClick={playPlayerVsComputer}>
+                            Player vs. Computer
+                        </Link>
                 
-            <Link to="/play">
-                <button className="playerVsComputer-btn" onClick={props.playPlayerVsPlayer}>Player vs. Player</button>
-            </Link>
+                        <Link to="/play" className="setGameMode-btn" onClick={playPlayerVsPlayer}>
+                            Player vs. Player
+                        </Link>
 
-            <form onSubmit={handleSubmit}>
-                <input type="text" ref={sizeOfBoard} onChange={removeHighlightInput} autoFocus />
-            </form>
+                        <form onSubmit={handleSubmit}>
+                            <input type="text" ref={sizeOfBoard} onChange={removeHighlightInput} autoFocus />
+                        </form>
+                    </animated.div>
+            )};
 
             {fireRedirect()}
         </div>

@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 
 //React-router
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 //Debounce - Lodash
 import {debounce} from 'lodash';
@@ -30,11 +26,6 @@ function App() {
     AImove:false  
   });
 
-  //Debounce computer move
-  const debounceComputerMove = debounce(()=>{
-    computerMove(values);
-  },500);
-
   //Create state for rows and columns
   const [dimensions,setDimensions] = useState({
     rows:null,
@@ -44,10 +35,22 @@ function App() {
   //Is there a winner?
   const [winner,setWinner] = useState(false);
 
+  //Winner count
+  const [winnerCount,setWinnerCount] = useState({
+    player1:0,
+    ties:0,
+    player2:0
+  });
+
   //Generate matrix and set to state
   function generateMatrix(rows,columns){
     setValues([...Array(rows)].map(e => Array(columns).fill(" "))); 
   }
+
+  //Debounce computer move
+  const debounceComputerMove = debounce(()=>{
+    computerMove(values);
+  },500);
 
   //Get size from input
   function getSize(size){
@@ -104,16 +107,16 @@ function App() {
   
             //Update matrix with new value
             setValues(newValue);
-  
+
+            //Check if there is a winner
+            checkWinner();
+
             //Switch state to computer move
             setPlayerVsPlayer(prevState => ({
               ...prevState,
               AImove:true
             }));
-            
-            //Check if there is a winner
-            checkWinner();
-            
+
             //Computer makes a move
             debounceComputerMove(values);
         }else{
@@ -140,7 +143,7 @@ function App() {
     }
 
     //If there are no empty cells then return
-    if(emptyCols.length > 0){
+    if(emptyCols.length > 0 && winner === false && tempWinner === false){
       //Get random from emptyCols
       randomCol = getRandomCol(emptyCols);
 
@@ -203,6 +206,9 @@ function App() {
   }
 
   //Check for winner
+  //Prevent computer making move after player wins
+  let tempWinner=false;
+  
   function checkWinner(){
     var xCount = 0;
     var oCount = 0;
@@ -219,6 +225,12 @@ function App() {
           if(xCount === 3){
             setWinner('X WINS!');
             displayWinner();
+            setWinnerCount(prevState => ({
+              ...prevState,
+              player1:prevState.player1 + 1
+            }));
+
+            tempWinner = true;
             return;
           }
         }else{
@@ -231,6 +243,12 @@ function App() {
           if(oCount === 3){
             setWinner('O WINS!');
             displayWinner();
+            setWinnerCount(prevState => ({
+              ...prevState,
+              player2:prevState.player2 + 1
+            }));
+
+            tempWinner = true;
             return;
           }
         }else{
@@ -251,6 +269,13 @@ function App() {
           if(xCount === 3){
             setWinner('X WINS!');
             displayWinner();
+            setWinnerCount(prevState => ({
+              ...prevState,
+              player1:prevState.player1 + 1
+            }));
+
+            tempWinner = true;
+            return;
           }
         }else{
           xCount = 0;
@@ -262,6 +287,13 @@ function App() {
           if(oCount === 3){
             setWinner('O WINS!');
             displayWinner();
+            setWinnerCount(prevState => ({
+              ...prevState,
+              player2:prevState.player2 + 1
+            }));
+
+            tempWinner = true;
+            return;
           }
         }else{
           oCount = 0;
@@ -278,6 +310,13 @@ function App() {
         if(xCount === 3){
           setWinner('X WINS!');
           displayWinner();
+          setWinnerCount(prevState => ({
+            ...prevState,
+            player1:prevState.player1 + 1
+          }));
+
+          tempWinner = true;
+          return;
         }
       }else{
         xCount = 0;
@@ -289,6 +328,13 @@ function App() {
         if(oCount === 3){
           setWinner('O WINS!');
           displayWinner();
+          setWinnerCount(prevState => ({
+            ...prevState,
+            player2:prevState.player2 + 1
+          }));
+
+          tempWinner = true;
+          return;
         }
       }else{
         oCount = 0;
@@ -303,6 +349,11 @@ function App() {
         if(xCount === 3) {
           setWinner("X WINS!");
           displayWinner();
+          setWinnerCount(prevState => ({
+            ...prevState,
+            player1:prevState.player1 + 1
+          }));
+          return;
         }
       }else{
         xCount = 0;
@@ -314,6 +365,13 @@ function App() {
         if(oCount === 3) {
           setWinner("O WINS!");
           displayWinner();
+          setWinnerCount(prevState => ({
+            ...prevState,
+            player2:prevState.player2 + 1
+          }));
+
+          tempWinner = true;
+          return;
         }
       }else{
         oCount = 0;
@@ -325,6 +383,13 @@ function App() {
     if(isFull === true && winner === false){
       setWinner("DRAW!");
       displayWinner();
+      setWinnerCount(prevState => ({
+        ...prevState,
+        ties:prevState.ties + 1
+      }));
+
+      tempWinner = true;
+      return;
     }
   }
 
@@ -342,10 +407,19 @@ function App() {
     setValues(newArr);
     setSign(true);
     setWinner(false);
-    setPlayerVsPlayer({
-      AI:true,
-      AImove:false
-    });
+
+    if(playerVsPlayer.AI === false){
+      setPlayerVsPlayer({
+        AI:false,
+        AImove:false
+      });
+    }else{
+      setPlayerVsPlayer({
+        AI:true,
+        AImove:false
+      });
+    }
+
   }
 
   //Reset whole game
@@ -354,12 +428,22 @@ function App() {
       rows:null,
       columns:null
     });
+
     setSign(true);
+
     setValues([]);
+
     setWinner(false);
+
     setPlayerVsPlayer({
       AI:false,
       AImove:false
+    });
+
+    setWinnerCount({
+      player1:0,
+      ties:0,
+      player2:0
     });
   }
 
@@ -389,6 +473,9 @@ function App() {
                 winner={winner}
                 restartGame={Restart}
                 resetGame={resetGame}
+                player1={winnerCount.player1}
+                ties={winnerCount.ties}
+                player2={winnerCount.player2}
                 />
             </Route>
           </Switch>
