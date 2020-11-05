@@ -23,7 +23,7 @@ function Home(props){
     //Starting animation
     const gameOptionsTransitions = useTransition(showGameOptions, null, {
         from: { opacity: 0, transform:'translateY(200px)' },
-        enter: { opacity: 1, transform:'translateY(0)' },
+        enter: { opacity: 1, transform:'translateY(0)'},
         leave: { opacity: 0, transform:'translateY(200px)'}
     });
 

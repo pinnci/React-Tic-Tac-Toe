@@ -469,7 +469,7 @@ function App() {
                 <CSSTransition
                   in={match != null}
                   timeout={300}
-                  classNames="page"
+                  classNames="slide-backward"
                   unmountOnExit
                   >
                     <div className="page">
@@ -491,7 +491,7 @@ function App() {
                 <CSSTransition
                   in={match != null}
                   timeout={300}
-                  classNames="page"
+                  classNames="slide-forward"
                   unmountOnExit
                   >
                     <div className="page">
