@@ -30,10 +30,16 @@ function Home(props){
     //Fire animations sent as a props
     function playPlayerVsComputer(){
         props.playPlayerVsComputer();
+
+        //Prevents the animation from trigger, when switching components. The animation will only run once at startup.
+        props.preventStartUpAnimation();
     }
 
     function playPlayerVsPlayer(){
         props.playPlayerVsPlayer();
+
+        //Prevents the animation from trigger, when switching components. The animation will only run once at startup.
+        props.preventStartUpAnimation();
     }
 
     //Handle form submit
@@ -95,7 +101,7 @@ function Home(props){
             <h1>Tic Tac Toe</h1>
             <p>Select game mode</p>
 
-            {gameOptionsTransitions.map(({ item, key, props }) =>
+            {props.startUpAnimation ? gameOptionsTransitions.map(({ item, key, props }) =>
                 item && 
                     <animated.div key={key} style={props}>
                         <Link to="/play" className="setGameMode-btn" onClick={playPlayerVsComputer}>
@@ -110,7 +116,20 @@ function Home(props){
                             <input type="text" ref={sizeOfBoard} onChange={removeHighlightInput} autoFocus />
                         </form>
                     </animated.div>
-            )};
+                ) : <div>
+                        <Link to="/play" className="setGameMode-btn" onClick={playPlayerVsComputer}>
+                            Player vs. Computer
+                        </Link>  
+
+                        <Link to="/play" className="setGameMode-btn" onClick={playPlayerVsPlayer}>
+                            Player vs. Player
+                        </Link>     
+                            
+                        <form onSubmit={handleSubmit}>
+                            <input type="text" ref={sizeOfBoard} onChange={removeHighlightInput} autoFocus />
+                        </form>
+                    </div>
+             }
 
             {fireRedirect()}
         </div>

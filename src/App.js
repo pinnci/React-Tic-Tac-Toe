@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 
 //React-router
-import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Route} from 'react-router-dom';
+
+//React-transition-group
+import { CSSTransition } from 'react-transition-group';
 
 //Debounce - Lodash
 import {debounce} from 'lodash';
@@ -14,6 +17,9 @@ import Home from './Components/Views/Home';
 import Play from './Components/Views/Play';
 
 function App() {
+  //Prevents the animation from trigger, when switching components. The animation will only run once at startup.
+  const [startUpAnimation,setStartUpAnimation] = useState(true);
+
   //State for distinguishing signs
   const [sign,setSign] = useState(true);
 
@@ -41,6 +47,11 @@ function App() {
     ties:0,
     player2:0
   });
+
+  //Set startAnimation state to false, so animation won't start again.
+  function preventStartUpAnimation(){
+    setStartUpAnimation(false);
+  }
 
   //Generate matrix and set to state
   function generateMatrix(rows,columns){
@@ -142,7 +153,7 @@ function App() {
       }
     }
 
-    //If there are no empty cells then return
+    //If there are no empty cells, then return
     if(emptyCols.length > 0 && winner === false && tempWinner === false){
       //Get random from emptyCols
       randomCol = getRandomCol(emptyCols);
@@ -195,7 +206,7 @@ function App() {
     setDimensions({
       rows:"3",
       columns:"3"
-    })
+    });
 
     generateMatrix(3,3);
   }
@@ -353,6 +364,8 @@ function App() {
             ...prevState,
             player1:prevState.player1 + 1
           }));
+
+          tempWinner = true; 
           return;
         }
       }else{
@@ -419,7 +432,6 @@ function App() {
         AImove:false
       });
     }
-
   }
 
   //Reset whole game
@@ -448,40 +460,64 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <div className="container">
-        <Router>
-          <Switch>
-            <Route exact path="/">
- 
-            <Home 
-              getSize={getSize}
-              playPlayerVsComputer={playPlayerVsComputer}
-              playPlayerVsPlayer={playPlayerVsPlayer}
-            />
-               
+    <Router>
+      <div className="App">
+        <div className="container">
+
+            <Route key="/" exact path="/">
+              {({match})=>(
+                <CSSTransition
+                  in={match != null}
+                  timeout={300}
+                  classNames="page"
+                  unmountOnExit
+                  >
+                    <div className="page">
+                      <Home
+                        getSize={getSize}
+                        playPlayerVsComputer={playPlayerVsComputer}
+                        playPlayerVsPlayer={playPlayerVsPlayer}
+                        startUpAnimation={startUpAnimation}
+                        preventStartUpAnimation={preventStartUpAnimation}
+                      />
+                    </div>
+
+                </CSSTransition>
+              )}
             </Route>
 
-            <Route path="/play">
-              <Play 
-                updateValues={updateValues}
-                values={values}
-                sign={sign}
-                rows={dimensions.rows}
-                columns={dimensions.columns}
-                displayWinner={displayWinner}
-                winner={winner}
-                restartGame={Restart}
-                resetGame={resetGame}
-                player1={winnerCount.player1}
-                ties={winnerCount.ties}
-                player2={winnerCount.player2}
-                />
+            <Route key="/play" exact path="/play">
+              {({match})=>(
+                <CSSTransition
+                  in={match != null}
+                  timeout={300}
+                  classNames="page"
+                  unmountOnExit
+                  >
+                    <div className="page">
+                      <Play 
+                        updateValues={updateValues}
+                        values={values}
+                        sign={sign}
+                        rows={dimensions.rows}
+                        columns={dimensions.columns}
+                        displayWinner={displayWinner}
+                        winner={winner}
+                        restartGame={Restart}
+                        resetGame={resetGame}
+                        player1={winnerCount.player1}
+                        ties={winnerCount.ties}
+                        player2={winnerCount.player2}
+                      />
+                    </div>
+
+                </CSSTransition>
+              )}
             </Route>
-          </Switch>
-        </Router>
+          
+        </div>
       </div>
-    </div>
+    </Router>
   );
 }
 
