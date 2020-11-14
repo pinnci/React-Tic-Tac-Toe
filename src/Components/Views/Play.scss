@@ -1,90 +1,92 @@
-table{
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-    border-collapse: collapse;
-    margin-bottom: 2em;
+.playScreen{
+    table{
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        border-collapse: collapse;
+        margin-bottom: 2em;
+        
+        tbody{
+            td{
+                width: 100px;
+                height: 100px;
+                text-align: -webkit-center;
+                color: white;
+                border: 1px solid white;
     
-    tbody{
-
-        td{
-            width: 100px;
-            height: 100px;
-            text-align: -webkit-center;
-            color: white;
-            border: 1px solid white;
-
-            .xSign{
-                width: 30px;
-                height: 30px;
-                line-height: 30px;
-                background-color: #00db93;
-                border-radius: 50%;
-                margin: 0;
+                .xSign{
+                    width: 30px;
+                    height: 30px;
+                    line-height: 30px;
+                    background-color: #00db93;
+                    border-radius: 50%;
+                    margin: 0;
+                }
+    
+                .oSign{
+                    width: 30px;
+                    height: 30px;
+                    line-height: 30px;
+                    background-color: #ff1567;
+                    border-radius: 50%;
+                    margin: 0;
+                }
             }
-
-            .oSign{
-                width: 30px;
-                height: 30px;
-                line-height: 30px;
-                background-color: #ff1567;
-                border-radius: 50%;
-                margin: 0;
+    
+            td:hover{
+                cursor: pointer;
             }
-        }
-
-        td:hover{
-            cursor: pointer;
-        }
-
-    }      
-}
-
-.iconContainer{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-
-    .icon{
-        display: contents;
-    }
-
-    .reloadButton{
-        fill:#555555;
-        width: 60px;
-        transition: .3s ease-in-out;
     
-    
-        &:hover{
-            fill:#898989;
-            cursor: pointer;
-        }
+        }      
     }
     
-    .goHomeButton{
-        fill:#555555;
-        width: 80px;
-        transition: .3s ease-in-out;
-    
-    
-        &:hover{
-            fill:#898989;
-            cursor: pointer;
-        }
-    }
-
-    .results{
-        width: 100%;
+    .iconContainer{
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        justify-content: space-evenly;
-
-        .column{
-            color:white;
+        width: 100%;
+    
+        .icon{
+            display: contents;
+        }
+    
+        .reloadButton{
+            fill:#555555;
+            width: 60px;
+            transition: .3s ease-in-out;
+        
+        
+            &:hover{
+                fill:#898989;
+                cursor: pointer;
+            }
+        }
+        
+        .goHomeButton{
+            fill:#555555;
+            width: 80px;
+            transition: .3s ease-in-out;
+        
+        
+            &:hover{
+                fill:#898989;
+                cursor: pointer;
+            }
+        }
+    
+        .results{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+    
+            .column{
+                color:white;
+            }
         }
     }
 }
+
 
 /*DISABLE CONTINUING GAME WHEN SOMEONE WINS*/
 .disable{

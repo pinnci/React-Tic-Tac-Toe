@@ -14,6 +14,7 @@ import './App.scss';
 
 //Views
 import Home from './Components/Views/Home';
+import Size from './Components/Views/Size';
 import Play from './Components/Views/Play';
 
 function App() {
@@ -187,13 +188,6 @@ function App() {
       AI:true,
       AImove:false
     });
-
-    setDimensions({
-      rows:"3",
-      columns:"3"
-    })
-
-    generateMatrix(3,3);
   }
 
   //Play player vs. player
@@ -202,13 +196,6 @@ function App() {
       AI:false,
       AImove:false
     });
-
-    setDimensions({
-      rows:"3",
-      columns:"3"
-    });
-
-    generateMatrix(3,3);
   }
 
   //Display who wins
@@ -436,14 +423,7 @@ function App() {
 
   //Reset whole game
   function resetGame(){
-    setDimensions({
-      rows:null,
-      columns:null
-    });
-
     setSign(true);
-
-    setValues([]);
 
     setWinner(false);
 
@@ -474,12 +454,29 @@ function App() {
                   >
                     <div className="page">
                       <Home
-                        getSize={getSize}
                         playPlayerVsComputer={playPlayerVsComputer}
                         playPlayerVsPlayer={playPlayerVsPlayer}
                         startUpAnimation={startUpAnimation}
                         preventStartUpAnimation={preventStartUpAnimation}
                       />
+                    </div>
+
+                </CSSTransition>
+              )}
+            </Route>
+
+            <Route key="/size" exact path="/size">
+              {({match})=>(
+                <CSSTransition
+                  in={match != null}
+                  timeout={300}
+                  classNames="slide-forward-size"
+                  unmountOnExit
+                  >
+                    <div className="page">
+                      <Size 
+                        getSize={getSize}
+                       />
                     </div>
 
                 </CSSTransition>

@@ -26,6 +26,7 @@ body{
     justify-content: center;
     margin: 0 auto;
     text-align: center;
+    overflow-x: hidden;
 }
 
 .page{
@@ -35,7 +36,7 @@ body{
 /*Transitions*/
 .slide-forward-enter{
     opacity: 0;
-    transform: translateX(100%);
+    transform: translateX(200%);
 }
   
 .slide-forward-enter-active{
@@ -52,13 +53,36 @@ body{
 .slide-forward-exit-active{
     opacity: 0;
     transition: 0.3s ease-in-out;
-    transform: translateX(100%);
+    transform: translateX(200%);
+}
+
+/*Slide from size to play*/
+.slide-forward-size-enter{
+    opacity: 0;
+    transform: translateX(200%);
+}
+  
+.slide-forward-size-enter-active{
+    opacity: 1;
+    transition: 0.3s ease-in-out;
+    transform: translateX(0);
+}
+  
+.slide-forward-size-exit{
+    opacity: 1;
+    transform: translateX(0);
+}
+  
+.slide-forward-size-exit-active{
+    opacity: 0;
+    transition: 0.3s ease-in-out;
+    transform: translateX(-200%);
 }
 
 /*Slide back*/
 .slide-backward-enter{
     opacity: 0;
-    transform: translateX(-100%);
+    transform: translateX(-200%);
 }
   
 .slide-backward-enter-active{
@@ -75,6 +99,6 @@ body{
 .slide-backward-exit-active{
     opacity: 0;
     transition: 0.3s ease-in-out;
-    transform: translateX(-100%);
+    transform: translateX(-200%);
 }
 

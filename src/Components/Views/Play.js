@@ -55,7 +55,7 @@ function Play(props){
     }
     
     return(
-        <div>
+        <div className="playScreen">
             <Indicator sign={props.sign} />
 
             <p className={colorChange()}>&nbsp;{displayWinner()}</p>
@@ -68,7 +68,9 @@ function Play(props){
             
             <div className="iconContainer">
                 <Link to="/" className="icon">
-                    <GoHome resetGame={props.resetGame} />
+                    <GoHome 
+                        resetGame={props.resetGame}
+                     />
                 </Link>
 
                 <div className="results">
@@ -88,7 +90,10 @@ function Play(props){
                     </div>
                 </div>
 
-                <ReloadGame restartGame={props.restartGame} className="icon" />
+                <ReloadGame 
+                    restartGame={props.restartGame} 
+                    className="icon"
+                 />
             </div>
 
         </div>
