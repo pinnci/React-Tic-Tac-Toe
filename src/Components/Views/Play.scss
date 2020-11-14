@@ -8,8 +8,8 @@
         
         tbody{
             td{
-                width: 100px;
-                height: 100px;
+                width: 60px;
+                height: 60px;
                 text-align: -webkit-center;
                 color: white;
                 border: 1px solid white;
@@ -107,4 +107,17 @@
 .draw{
     color:white;
     font-size: 2em;
+}
+
+/*MEDIA QUERIES*/
+@media screen and (max-width: 450px) {
+    .playScreen{
+        font-size: 80%;
+    }
+}
+
+@media screen and(max-width: 350px){
+    .playScreen{
+        font-size: 60%;
+    }
 }

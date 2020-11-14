@@ -72,3 +72,16 @@
         color:red;
     }
 }
+
+/*MEDIA QUERIES*/
+@media screen and (max-width: 450px) {
+    .sizeScreen{
+        font-size: 80%;
+    }
+}
+
+@media screen and(max-width: 350px){
+    .sizeScreen{
+        font-size: 60%;
+    }
+}

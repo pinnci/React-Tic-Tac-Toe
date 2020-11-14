@@ -37,3 +37,16 @@
     }
 }
 
+
+/*MEDIA QUERIES*/
+@media screen and (max-width: 450px) {
+    .homeScreen{
+        font-size: 80%;
+    }
+}
+
+@media screen and(max-width: 350px){
+    .homeScreen{
+        font-size: 60%;
+    }
+}

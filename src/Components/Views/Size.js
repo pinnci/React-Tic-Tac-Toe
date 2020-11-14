@@ -16,7 +16,10 @@ function Size(props){
     const sizeOfBoard = useRef(null);
 
     //State for an error checking
-    const [isError,setIsError] = useState(false);
+    const [isError,setIsError] = useState({
+        error:false,
+        errorMessage:''
+    });
 
     //Handle form submit
     function handleSubmit(e){
@@ -31,8 +34,38 @@ function Size(props){
             let rows = Number(size.substr(0,x));
             let cols = Number(size.substr(x+1));
 
+            //Get window screen width for setting maximum available game board size for users device
+            let width = window.screen.width;
+
             if(size.indexOf('x') === -1 || rows !== cols || rows < 3 || cols < 3){
-                setIsError(true);
+                setIsError({
+                    error:true,
+                    errorMessage:'Please enter correct format. (i.e 4x4)'
+                });
+                sizeOfBoard.current.value = '';
+            }else if(width < 500 && rows > 5){
+                setIsError({
+                    error:true,
+                    errorMessage:'Maximum game size on this device is 5x5'
+                });
+                sizeOfBoard.current.value = '';
+            }else if(width < 320 && rows > 4){
+                setIsError({
+                    error:true,
+                    errorMessage:'Maximum game size on this device is 4x4'
+                });
+                sizeOfBoard.current.value = '';
+            }else if(width > 1500 && rows > 8){
+                setIsError({
+                    error:true,
+                    errorMessage:'Maximum game size on this device is 8x8'
+                });
+                sizeOfBoard.current.value = '';
+            }else if(rows > 10){
+                setIsError({
+                    error:true,
+                    errorMessage:'Maximum game size is 10x10'
+                });
                 sizeOfBoard.current.value = '';
             }else{
                 //Send size to getSize function in App.js
@@ -44,14 +77,17 @@ function Size(props){
                 setRedirect(true);
             }
         }else{
-            setIsError(true);
+            setIsError({
+                error:true,
+                errorMessage:'Please enter correct format. (i.e 4x4)'
+            });
         }
     }
 
     //Adds error stylings to input
-    if(isError){
+    if(isError.error === true){
         sizeOfBoard.current.style.border='2px solid red';
-        sizeOfBoard.current.placeholder='Please enter correct format. (i.e 4x4)';
+        sizeOfBoard.current.placeholder=isError.errorMessage;
         sizeOfBoard.current.className = 'error';
     }
 
